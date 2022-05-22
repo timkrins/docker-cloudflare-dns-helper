@@ -1,5 +1,8 @@
 # docker-cloudflare-dns-helper
 
+[![Docker Stars](https://img.shields.io/docker/stars/timkrins/docker-cloudflare-dns-helper.svg?style=flat-square&logo=docker)](https://hub.docker.com/r/timkrins/docker-cloudflare-dns-helper/)
+[![Docker Pulls](https://img.shields.io/docker/pulls/timkrins/docker-cloudflare-dns-helper.svg?style=flat-square&logo=docker)](https://hub.docker.com/r/timkrins/docker-cloudflare-dns-helper/)
+
 This is a very simple tool to allow creation of Cloudflare DNS records using Docker labels.
 
 It is inspired by `tiredofit/docker-traefik-cloudflare-companion` and `code5-lab/dns-flare`, using the config-by-label concept but does not require or use Traefik labels.
