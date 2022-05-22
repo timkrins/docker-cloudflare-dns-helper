@@ -57,3 +57,14 @@ def print_potential_records(container_name: str, labels: dict) -> None:
 
     console = Console()
     console.print(table)
+
+def print_existing_record(data: dict) -> None:
+    table = Table(title="Existing DNS Record")
+    table.add_column("label")
+    table.add_column("data")
+
+    for k, v in data.items():
+        table.add_row(k, str(v))
+
+    console = Console()
+    console.print(table)
