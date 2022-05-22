@@ -1,0 +1,11 @@
+version: "3"
+
+services:
+  docker-cloudflare-dns-helper:
+    image: timkrins/docker-cloudflare-dns-helper
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    environment:
+      - "CLOUDFLARE_EMAIL=${CLOUDFLARE_EMAIL}"
+      - "CLOUDFLARE_API_KEY=${CLOUDFLARE_API_KEY}"
