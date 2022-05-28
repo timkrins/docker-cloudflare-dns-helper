@@ -66,3 +66,23 @@ For example,
       - cloudflare-dns.3.name=three.example.com
 ```
 would create three DNS entries, with the third entry having a different target.
+
+Defaults can be supplied to the container via ENV variables.
+ENV variable keys will be lowercased, with triple-underscores replaced by dashes, and double-underscores replaced by periods.
+For example,
+
+```
+services:
+  docker-cloudflare-dns-helper:
+    image: timkrins/docker-cloudflare-dns-helper
+    restart: always
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    environment:
+      - "CLOUDFLARE_EMAIL=${CLOUDFLARE_EMAIL}"
+      - "CLOUDFLARE_API_KEY=${CLOUDFLARE_API_KEY}"
+      - "CLOUDFLARE___DNS__ZONE_NAME=example.com"
+      - "CLOUDFLARE___DNS__CONTENT=target.example.com"
+      - "CLOUDFLARE___DNS__TYPE=CNAME"
+      - "CLOUDFLARE___DNS__PROXIED=true"
+```
