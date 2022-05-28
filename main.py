@@ -7,32 +7,41 @@ from DockerApi import DockerApi
 from CloudflareApi import CloudflareApi
 from CloudflareApi import filter_valid_dns_records
 
-cf = CloudflareApi()
-d = DockerApi()
+cloudflare_api = CloudflareApi()
+docker_api = DockerApi()
+
+container_cache = dict()
 
 def process():
-    r = dict()
-    for container_name, labels in d.containers_labels().items():
-        rr = dict()
+    merged_container_results = dict()
+    for container_name, labels in docker_api.containers_labels().items():
+        container_results = dict()
         for label, value in filter_labels(labels):
-            rr[label] = value
-        merged = merge_all(rr)
+            container_results[label] = value
+        merged = merge_all(container_results)
         if merged:
-            r[container_name] = merged
+            merged_container_results[container_name] = merged
 
-    for container_name, labels in r.items():
+    for container_name, labels in merged_container_results.items():
+        container_labels_from_cache = container_cache.get(container_name, False)
+        if container_labels_from_cache == labels:
+            print("Skipping unchanged DNS configuration for {}".format(container_name))
+            continue
+        else:
+            container_cache[container_name] = labels
+
         print_potential_records(container_name, labels)
         dns_records = filter_valid_dns_records(list(labels.values()))
         for dns_record_data in dns_records:
-            record = cf.build_dns_record(dns_record_data)
-            existing = cf.find_existing_dns_record(record)
+            record = cloudflare_api.build_dns_record(dns_record_data)
+            existing = cloudflare_api.find_existing_dns_record(record)
             if existing:
                 print_existing_record(existing)
             else:
-                cf.create_dns_record(record)
+                cloudflare_api.create_dns_record(record)
 
 process()
 
-for event in d.start_container_events():
+for event in docker_api.start_container_events():
     # reprocess all containers on any start event
     process()
