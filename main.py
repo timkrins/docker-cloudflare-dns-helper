@@ -23,9 +23,9 @@ def process():
     merged_container_results = dict()
     for container_name, labels in docker_api.containers_labels().items():
         container_results = dict()
-        for label, value in filter_labels(labels):
+        for label, value in filter_labels(env_defaults.items()):
             container_results[label] = value
-        for label, value in filter_labels(env_defaults):
+        for label, value in filter_labels(labels):
             container_results[label] = value
         merged = merge_all(container_results)
         if merged:

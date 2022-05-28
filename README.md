@@ -86,3 +86,11 @@ services:
       - "CLOUDFLARE___DNS__TYPE=CNAME"
       - "CLOUDFLARE___DNS__PROXIED=true"
 ```
+
+### Development
+
+```
+sudo docker build . -t dcdh
+sudo docker run --mount type=bind,source=/var/run/docker.sock,target=/var/run/docker.sock,readonly --mount type=bind,source="$(pwd)",target=/app -it dcdh /bin/sh
+python main.py
+```
